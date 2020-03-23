@@ -1,11 +1,8 @@
+import "./env";
 import express from "express";
 import bodyParser from "body-parser";
 import * as logger from "winston";
 import { MongoClient } from "mongodb";
-
-import { loadConfig } from "./config";
-
-loadConfig();
 
 logger.configure({
   level: "debug",
