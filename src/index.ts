@@ -13,7 +13,7 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-const port = 8080; // default port to listen
+const PORT = process.env.PORT || 8080;
 
 const CORS_HEADER = "Access-Control-Allow-Origin";
 
@@ -54,6 +54,6 @@ app.get("/courses", async (req, res) => {
 });
 
 // start the Express server
-app.listen(port, () => {
-  logger.info(`server started at http://localhost:${port}`);
+app.listen(PORT, () => {
+  logger.info(`server started at http://localhost:${PORT}`);
 });
