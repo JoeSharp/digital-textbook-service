@@ -3,7 +3,7 @@ import bodyParser from "body-parser";
 import * as logger from "winston";
 import { MongoClient } from "mongodb";
 
-import * as config from "../config.json";
+import * as config from "../prod.json";
 
 logger.configure({
   level: "debug",
