@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Server for the Computer Science digital textbook teaching system",
   "main": "dist/src/index.js",
+  "engines": {
+    "node": "12.16.x"
+  },
   "scripts": {
     "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
     "build": "tsc",
