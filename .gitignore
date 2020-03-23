@@ -5,7 +5,7 @@
 /dist
 /.pnp
 .pnp.js
-config.json
+src/config.json
 prod.json
 dev.json
 

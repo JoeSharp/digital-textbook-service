@@ -3,14 +3,14 @@ import bodyParser from "body-parser";
 import * as logger from "winston";
 import { MongoClient } from "mongodb";
 
-import * as config from "../config.json";
+import { loadConfig } from "./config";
+
+loadConfig();
 
 logger.configure({
   level: "debug",
   transports: [new logger.transports.Console()]
 });
-
-logger.info(`Running with config: ${JSON.stringify(config, null, 2)}`);
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -26,7 +26,7 @@ interface Course {
 
 // define a route handler for the default home page
 app.get("/courses", async (req, res) => {
-  const client = new MongoClient(config.DB_URL, {
+  const client = new MongoClient(process.env.DB_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true
   });
@@ -35,8 +35,8 @@ app.get("/courses", async (req, res) => {
     await client.connect();
 
     const collection = client
-      .db(config.DB_NAME)
-      .collection(config.DB_COLLECTION_COURSES);
+      .db(process.env.DB_NAME)
+      .collection(process.env.DB_COLLECTION_COURSES);
     // perform actions on the collection object
     const courses: Course[] = [];
     const cursor = collection.find();
@@ -45,7 +45,7 @@ app.get("/courses", async (req, res) => {
       courses.push(course as Course);
     }
 
-    res.setHeader(CORS_HEADER, config.UI_ORIGIN);
+    res.setHeader(CORS_HEADER, process.env.UI_ORIGIN);
     res.send(courses);
   } catch (err) {
     logger.error(err);

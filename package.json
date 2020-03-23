@@ -2,7 +2,7 @@
   "name": "teach-code-server",
   "version": "1.0.0",
   "description": "Server for the Computer Science digital textbook teaching system",
-  "main": "dist/src/index.js",
+  "main": "dist/index.js",
   "engines": {
     "node": "12.16.x"
   },
