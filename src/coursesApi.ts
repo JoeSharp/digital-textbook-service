@@ -2,42 +2,47 @@ import { Express } from "express";
 import { MongoClient } from "mongodb";
 import * as logger from "winston";
 
-import { Course, CORS_HEADER } from "./types";
+import { Course, ICourse } from "./db/model/course";
 
 interface Props {
   app: Express;
 }
 
 const coursesApi = ({ app }: Props) => {
-  app.get("/courses", async (req, res) => {
-    const client = new MongoClient(process.env.DB_URL, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    });
-
+  app.post("/courses", async (req, res) => {
+    const course = new Course(req.body);
     try {
-      await client.connect();
+      course.save();
+      res.send(course);
+    } catch (err) {
+      logger.error(err);
+      res.status(500);
+      res.send(err);
+    }
+  });
 
-      const collection = client
-        .db(process.env.DB_NAME)
-        .collection(process.env.DB_COLLECTION_COURSES);
-      // perform actions on the collection object
-      const courses: Course[] = [];
-      const cursor = collection.find();
-      while (await cursor.hasNext()) {
-        const course = await cursor.next();
-        courses.push(course as Course);
-      }
+  app.get("/courses", async (req, res) => {
+    try {
+      const courses = await Course.find({});
 
-      res.setHeader(CORS_HEADER, process.env.UI_ORIGIN);
       res.send(courses);
     } catch (err) {
       logger.error(err);
-      res.sendStatus(500);
+      res.status(500);
+      res.send(err);
     }
+  });
 
-    // Close connection
-    client.close();
+  app.get("/courses/:id", async (req, res) => {
+    try {
+      const course = await Course.findOne({ _id: req.params.id });
+
+      res.send(course);
+    } catch (err) {
+      logger.error(err);
+      res.status(500);
+      res.send(err);
+    }
   });
 };
 

@@ -4,22 +4,28 @@ import bodyParser from "body-parser";
 import * as logger from "winston";
 
 import coursesApi from "./coursesApi";
+import { connectDb } from "./db/mongoose";
 
 logger.configure({
   level: "debug",
   transports: [new logger.transports.Console()]
 });
 
+connectDb();
+
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", process.env.UI_ORIGIN);
+  next();
+});
 
 const PORT = process.env.PORT || 8080;
 
-// define a route handler for the default home page
 coursesApi({ app });
 
 // start the Express server
 app.listen(PORT, () => {
-  logger.info(`server started at http://localhost:${PORT}`);
+  logger.info(`server started on port ${PORT}`);
 });
