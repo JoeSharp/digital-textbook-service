@@ -17,11 +17,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/lodash": "^4.14.149",
     "@types/mongodb": "^3.5.2",
     "@types/mongoose": "^5.7.7",
     "body-parser": "^1.19.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "lodash": "^4.17.15",
     "mongodb": "^3.5.5",
     "mongoose": "^5.9.6",
     "tslint": "^6.1.0",

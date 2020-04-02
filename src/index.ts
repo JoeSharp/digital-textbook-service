@@ -5,6 +5,8 @@ import * as logger from "winston";
 
 import coursesApi from "./coursesApi";
 import { connectDb } from "./db/mongoose";
+import uiCors from "./middleware/cors_ui";
+import authenticate from "./middleware/authenticate";
 
 logger.configure({
   level: "debug",
@@ -16,10 +18,8 @@ connectDb();
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", process.env.UI_ORIGIN);
-  next();
-});
+app.use(authenticate);
+app.use(uiCors);
 
 const PORT = process.env.PORT || 8080;
 
