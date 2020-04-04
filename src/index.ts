@@ -3,14 +3,14 @@ import express from "express";
 import bodyParser from "body-parser";
 import * as logger from "winston";
 
-import coursesApi from "./coursesApi";
+import coursesApi from "./api/coursesApi";
 import { connectDb } from "./db/mongoose";
 import uiCors from "./middleware/cors_ui";
 import authenticate from "./middleware/authenticate";
 
 logger.configure({
   level: "debug",
-  transports: [new logger.transports.Console()]
+  transports: [new logger.transports.Console()],
 });
 
 connectDb();

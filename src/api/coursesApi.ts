@@ -2,15 +2,18 @@ import { Express } from "express";
 import * as logger from "winston";
 import * as _ from "lodash";
 
-import { Course } from "./db/model/course";
-import { ObjectID } from "mongodb";
+import { Course } from "../db/model/course";
+import checkPathId from "../middleware/checkPathId";
 
 interface Props {
   app: Express;
 }
 
+const RESOURCE_URL = "/course";
+const RESOURCE_WITH_ID = `${RESOURCE_URL}/:id`;
+
 const coursesApi = ({ app }: Props) => {
-  app.get("/course", async (req, res) => {
+  app.get(RESOURCE_URL, async (req, res) => {
     try {
       const courses = await Course.find({});
       res.send(courses);
@@ -21,13 +24,9 @@ const coursesApi = ({ app }: Props) => {
     }
   });
 
-  app.get("/course/:id", async (req, res) => {
+  app.get(RESOURCE_WITH_ID, checkPathId, async (req, res) => {
     try {
       const _id = req.params.id;
-
-      if (!ObjectID.isValid(_id)) {
-        return res.status(404).send();
-      }
 
       const course = await Course.findOne({ _id });
       res.send(course);
@@ -38,7 +37,7 @@ const coursesApi = ({ app }: Props) => {
     }
   });
 
-  app.post("/course", async (req, res) => {
+  app.post(RESOURCE_URL, async (req, res) => {
     try {
       const course = new Course(req.body);
       course.save();
@@ -50,13 +49,9 @@ const coursesApi = ({ app }: Props) => {
     }
   });
 
-  app.patch("/course/:id", async (req, res) => {
+  app.patch(RESOURCE_WITH_ID, checkPathId, async (req, res) => {
     try {
       const _id = req.params.id;
-
-      if (!ObjectID.isValid(_id)) {
-        return res.status(404).send();
-      }
 
       const body = _.pick(req.body, ["name", "description"]);
 
@@ -78,13 +73,9 @@ const coursesApi = ({ app }: Props) => {
     }
   });
 
-  app.delete("/course/:id", async (req, res) => {
+  app.delete(RESOURCE_WITH_ID, checkPathId, async (req, res) => {
     try {
       const _id = req.params.id;
-
-      if (!ObjectID.isValid(_id)) {
-        return res.status(404).send();
-      }
 
       const removed = await Course.findOneAndDelete({ _id });
 
