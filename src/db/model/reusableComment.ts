@@ -1,16 +1,18 @@
 import { model, Schema, Document, Types } from "mongoose";
 
-export interface IReusableComment extends Document {
+export interface IReusableComment {
   content: string;
 }
 
+export type IReusableCommentDoc = Document & IReusableComment;
+
 const ReusableCommentSchema: Schema = new Schema({
   content: {
-    type: String
-  }
+    type: String,
+  },
 });
 
-export const ReusableComment = model<IReusableComment>(
+export const ReusableComment = model<IReusableCommentDoc>(
   "reusableComment",
   ReusableCommentSchema
 );

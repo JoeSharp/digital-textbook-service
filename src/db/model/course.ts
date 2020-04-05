@@ -1,17 +1,19 @@
-import { connect, model, Schema, Document } from "mongoose";
+import { model, Schema, Document } from "mongoose";
 
-export interface ICourse extends Document {
+export interface ICourse {
   name: string;
   description: string;
 }
 
+export type ICourseDoc = Document & ICourse;
+
 const CourseSchema: Schema = new Schema({
   name: {
-    type: String
+    type: String,
   },
   description: {
-    type: String
-  }
+    type: String,
+  },
 });
 
-export const Course = model<ICourse>("course", CourseSchema);
+export const Course = model<ICourseDoc>("course", CourseSchema);

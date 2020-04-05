@@ -1,17 +1,19 @@
 import { model, Schema, Document } from "mongoose";
 
-export interface ITask extends Document {
+export interface ITask {
   title: string;
   instructions: string;
 }
 
+export type ITaskDoc = Document & ITask;
+
 const TaskSchema: Schema = new Schema({
   title: {
-    type: String
+    type: String,
   },
   instructions: {
-    type: String
-  }
+    type: String,
+  },
 });
 
-export const Task = model<ITask>("task", TaskSchema);
+export const Task = model<ITaskDoc>("task", TaskSchema);

@@ -1,6 +1,6 @@
 import { model, Schema, Document, Types } from "mongoose";
 
-export interface IComment extends Document {
+export interface IComment {
   threadId: Types.ObjectId;
   reuseId?: Types.ObjectId;
   content: string;
@@ -8,23 +8,25 @@ export interface IComment extends Document {
   dateTime: number;
 }
 
+export type ICommentDoc = Document & IComment;
+
 const CommentSchema: Schema = new Schema({
   threadId: {
-    type: Types.ObjectId
+    type: Types.ObjectId,
   },
   reuseId: {
     type: Types.ObjectId,
-    required: false
+    required: false,
   },
   content: {
-    type: String
+    type: String,
   },
   userId: {
-    type: Types.ObjectId
+    type: Types.ObjectId,
   },
   dateTime: {
-    type: Date
-  }
+    type: Date,
+  },
 });
 
-export const Comment = model<IComment>("comment", CommentSchema);
+export const Comment = model<ICommentDoc>("comment", CommentSchema);

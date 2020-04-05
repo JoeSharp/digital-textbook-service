@@ -1,21 +1,23 @@
 import { model, Schema, Document, Types } from "mongoose";
 
-export interface ILesson extends Document {
+export interface ILesson {
   lessonId: Types.ObjectId;
   title: string;
   description: string;
 }
 
+export type ILessonDoc = Document & ILesson;
+
 const LessonSchema: Schema = new Schema({
   lessonId: {
-    type: Types.ObjectId
+    type: Types.ObjectId,
   },
   title: {
-    type: String
+    type: String,
   },
   description: {
-    type: String
-  }
+    type: String,
+  },
 });
 
-export const Lesson = model<ILesson>("lesson", LessonSchema);
+export const Lesson = model<ILessonDoc>("lesson", LessonSchema);

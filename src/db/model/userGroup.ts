@@ -1,17 +1,19 @@
 import { model, Schema, Document, Types } from "mongoose";
 
-export interface IUserGroup extends Document {
+export interface IUserGroup {
   teacherId: Types.ObjectId;
   name: string;
 }
 
+export type IUserGroupDoc = Document & IUserGroup;
+
 const UserGroupSchema: Schema = new Schema({
   teacherId: {
-    type: Types.ObjectId
+    type: Types.ObjectId,
   },
   name: {
-    type: String
-  }
+    type: String,
+  },
 });
 
-export const UserGroup = model<IUserGroup>("user", UserGroupSchema);
+export const UserGroup = model<IUserGroupDoc>("user", UserGroupSchema);
