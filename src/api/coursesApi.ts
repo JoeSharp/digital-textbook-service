@@ -55,6 +55,9 @@ const coursesApi = ({ app }: Props) => {
       const _id = req.params.id;
 
       const body = _.pick(req.body, ["name", "description"]);
+      logger.info(
+        `Updating course ${_id} with ${JSON.stringify(body, null, 2)}`
+      );
 
       const updated = await Course.findOneAndUpdate(
         { _id },
