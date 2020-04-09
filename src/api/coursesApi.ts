@@ -4,6 +4,7 @@ import * as _ from "lodash";
 
 import { Course } from "../db/model/course";
 import checkPathId from "../middleware/checkPathId";
+import { ObjectID } from "mongodb";
 
 interface Props {
   app: Express;
@@ -49,7 +50,7 @@ const coursesApi = ({ app }: Props) => {
     }
   });
 
-  app.patch(RESOURCE_WITH_ID, checkPathId, async (req, res) => {
+  app.put(RESOURCE_WITH_ID, checkPathId, async (req, res) => {
     try {
       const _id = req.params.id;
 
