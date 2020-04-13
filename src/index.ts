@@ -3,7 +3,9 @@ import express from "express";
 import bodyParser from "body-parser";
 import * as logger from "winston";
 
-import coursesApi from "./api/coursesApi";
+import courseApi from "./api/courseApi";
+import lessonApi from "./api/lessonApi";
+import taskApi from "./api/taskApi";
 import { connectDb } from "./db/mongoose";
 import uiCors from "./middleware/cors_ui";
 import authenticate from "./middleware/authenticate";
@@ -23,7 +25,9 @@ app.use(uiCors);
 
 const PORT = process.env.PORT || 8080;
 
-coursesApi({ app });
+courseApi({ app });
+lessonApi({ app });
+taskApi({ app });
 
 // start the Express server
 app.listen(PORT, () => {

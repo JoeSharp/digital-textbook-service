@@ -4,7 +4,6 @@ import * as _ from "lodash";
 
 import { Course } from "../db/model/course";
 import checkPathId from "../middleware/checkPathId";
-import { ObjectID } from "mongodb";
 
 interface Props {
   app: Express;
@@ -30,6 +29,11 @@ const coursesApi = ({ app }: Props) => {
       const _id = req.params.id;
 
       const course = await Course.findOne({ _id });
+
+      if (!course) {
+        return res.sendStatus(404);
+      }
+
       res.send(course);
     } catch (err) {
       logger.error(err);
@@ -66,7 +70,7 @@ const coursesApi = ({ app }: Props) => {
       );
 
       if (!updated) {
-        return res.status(404).send();
+        return res.sendStatus(404);
       }
 
       return res.send({ updated });
@@ -84,7 +88,7 @@ const coursesApi = ({ app }: Props) => {
       const removed = await Course.findOneAndDelete({ _id });
 
       if (!removed) {
-        return res.status(404).send();
+        return res.sendStatus(404);
       }
 
       res.send({ removed });

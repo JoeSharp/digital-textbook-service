@@ -1,7 +1,7 @@
 import { model, Schema, Document, Types } from "mongoose";
 
 export interface ILesson {
-  lessonId: Types.ObjectId;
+  courseId: Types.ObjectId;
   title: string;
   description: string;
 }
@@ -9,7 +9,7 @@ export interface ILesson {
 export type ILessonDoc = Document & ILesson;
 
 const LessonSchema: Schema = new Schema({
-  lessonId: {
+  courseId: {
     type: Types.ObjectId,
   },
   title: {
