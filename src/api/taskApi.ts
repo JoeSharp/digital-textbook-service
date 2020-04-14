@@ -52,7 +52,7 @@ const lessonApi = ({ app }: Props) => {
     try {
       const lessonId = req.params.id;
 
-      const body = _.pick(req.body, ["title", "instruction"]);
+      const body = _.pick(req.body, ["type", "title", "instruction"]);
       logger.info(
         `Creating Task for lesson ${lessonId} with ${JSON.stringify(
           body,
