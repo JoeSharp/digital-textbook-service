@@ -1,18 +1,14 @@
-import { Express } from "express";
 import * as logger from "winston";
 import * as _ from "lodash";
 
 import { Course } from "../db/model/course";
 import checkPathId from "../middleware/checkPathId";
-
-interface Props {
-  app: Express;
-}
+import { RestApi } from "./types";
 
 const RESOURCE_URL = "/course";
 const RESOURCE_WITH_ID = `${RESOURCE_URL}/:id`;
 
-const coursesApi = ({ app }: Props) => {
+const coursesApi: RestApi = ({ app }) => {
   app.get(RESOURCE_URL, async (req, res) => {
     try {
       const courses = await Course.find({});

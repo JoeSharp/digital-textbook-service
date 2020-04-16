@@ -1,19 +1,15 @@
-import { Express } from "express";
 import * as logger from "winston";
 import * as _ from "lodash";
 
 import { Lesson } from "../db/model/lesson";
 import checkPathId from "../middleware/checkPathId";
-
-interface Props {
-  app: Express;
-}
+import { RestApi } from "./types";
 
 const RESOURCE_URL = "/lesson";
 const RESOURCE_FOR_COURSE_ID = `${RESOURCE_URL}/forCourse/:id`;
 const RESOURCE_WITH_LESSON_ID = `${RESOURCE_URL}/:id`;
 
-const lessonApi = ({ app }: Props) => {
+const lessonApi: RestApi = ({ app }) => {
   // Get all lessons for a course
   app.get(RESOURCE_FOR_COURSE_ID, async (req, res) => {
     try {
