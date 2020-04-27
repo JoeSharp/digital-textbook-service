@@ -1,7 +1,7 @@
 import * as logger from "winston";
 import * as _ from "lodash";
 
-import { Task } from "../db/model/task/task";
+import { Task } from "../db/model/task";
 import checkPathId from "../middleware/checkPathId";
 import { RestApi } from "./types";
 
@@ -9,7 +9,7 @@ const RESOURCE_URL = "/task";
 const RESOURCE_FOR_LESSON_ID = `${RESOURCE_URL}/forLesson/:id`;
 const RESOURCE_WITH_TASK_ID = `${RESOURCE_URL}/:id`;
 
-const lessonApi: RestApi = ({ app }) => {
+const api: RestApi = ({ app }) => {
   // Get all tasks for lesson
   app.get(RESOURCE_FOR_LESSON_ID, async (req, res) => {
     try {
@@ -116,4 +116,4 @@ const lessonApi: RestApi = ({ app }) => {
   });
 };
 
-export default lessonApi;
+export default api;

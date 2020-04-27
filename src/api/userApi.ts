@@ -6,7 +6,7 @@ import { IUser } from "../db/model/user";
 
 const RESOURCE_URL = "/user";
 
-const userApi: RestApi = ({ app }) => {
+const api: RestApi = ({ app }) => {
   app.get(RESOURCE_URL, (req, res) => {
     const token = req.header("Authorization");
     logger.info(`Logging in with auth token: ${token}`);
@@ -19,4 +19,4 @@ const userApi: RestApi = ({ app }) => {
   });
 };
 
-export default userApi;
+export default api;

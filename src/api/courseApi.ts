@@ -8,7 +8,7 @@ import { RestApi } from "./types";
 const RESOURCE_URL = "/course";
 const RESOURCE_WITH_ID = `${RESOURCE_URL}/:id`;
 
-const coursesApi: RestApi = ({ app }) => {
+const api: RestApi = ({ app }) => {
   app.get(RESOURCE_URL, async (req, res) => {
     try {
       const courses = await Course.find({});
@@ -96,4 +96,4 @@ const coursesApi: RestApi = ({ app }) => {
   });
 };
 
-export default coursesApi;
+export default api;

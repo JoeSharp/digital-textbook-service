@@ -9,7 +9,7 @@ const RESOURCE_URL = "/lesson";
 const RESOURCE_FOR_COURSE_ID = `${RESOURCE_URL}/forCourse/:id`;
 const RESOURCE_WITH_LESSON_ID = `${RESOURCE_URL}/:id`;
 
-const lessonApi: RestApi = ({ app }) => {
+const api: RestApi = ({ app }) => {
   // Get all lessons for a course
   app.get(RESOURCE_FOR_COURSE_ID, async (req, res) => {
     try {
@@ -113,4 +113,4 @@ const lessonApi: RestApi = ({ app }) => {
   });
 };
 
-export default lessonApi;
+export default api;
