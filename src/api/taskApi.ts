@@ -1,7 +1,7 @@
 import * as logger from "winston";
 import * as _ from "lodash";
 
-import { Task } from "../db/model/task";
+import { Task } from "../db/model/task/task";
 import checkPathId from "../middleware/checkPathId";
 import { RestApi } from "./types";
 
@@ -48,7 +48,12 @@ const lessonApi: RestApi = ({ app }) => {
     try {
       const lessonId = req.params.id;
 
-      const body = _.pick(req.body, ["type", "title", "instruction"]);
+      const body = _.pick(req.body, [
+        "type",
+        "title",
+        "instruction",
+        "videoLink",
+      ]);
       logger.info(
         `Creating Task for lesson ${lessonId} with ${JSON.stringify(
           body,
@@ -57,8 +62,8 @@ const lessonApi: RestApi = ({ app }) => {
         )}`
       );
 
-      const task = new Task({ lessonId, ...req.body });
-      task.save();
+      const task = { lessonId, ...req.body };
+      await Task.create(task);
       res.send(task);
     } catch (err) {
       logger.error(err);
