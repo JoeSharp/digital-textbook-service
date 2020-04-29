@@ -1,5 +1,6 @@
 import { Schema } from "mongoose";
 import { SchemaById } from "../../types";
+import { setDiscriminator } from "./utils";
 
 // Questions
 export enum IQuestionType {
@@ -33,7 +34,7 @@ export type IQuestion =
   | IFreeFlowWithClueQuestion
   | IFreeFlowQuestion;
 
-export interface IQuestionSet {
+export interface IScaffoldedQuestions {
   caption: string;
   questions: IQuestion[];
 }
@@ -51,7 +52,7 @@ export const QuestionSchema = new Schema(
   { _id: false, discriminatorKey: "type" }
 );
 
-export const QuestionSetSchema = new Schema(
+export const ScaffoldedQuestionsSchema = new Schema(
   {
     caption: {
       type: String,
@@ -91,3 +92,26 @@ export const QuestionSchemas: SchemaById = {
     { _id: false }
   ),
 };
+
+setDiscriminator({
+  parentSchema: ScaffoldedQuestionsSchema,
+  path: "questions",
+  schemasById: QuestionSchemas,
+});
+
+export interface IScaffoldedInstructions {
+  caption: string;
+  instructions: string[];
+}
+
+export const ScaffoldedInstructionsSchema = new Schema(
+  {
+    caption: {
+      type: String,
+    },
+    instructions: {
+      type: [String],
+    },
+  },
+  { _id: false }
+);

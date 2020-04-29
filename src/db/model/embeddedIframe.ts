@@ -1,4 +1,4 @@
-import { model, Schema, Document } from "mongoose";
+import { Schema, Document } from "mongoose";
 import { SchemaById } from "../../types";
 
 export enum IEmbeddedIframeSystem {

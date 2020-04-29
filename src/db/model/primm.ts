@@ -4,8 +4,13 @@ import {
   EmbeddedIframeSchema,
   EmbeddedSystemSchemas,
 } from "./embeddedIframe";
-import { IQuestionSet, QuestionSchemas, QuestionSetSchema } from "./question";
-import { SchemaById } from "../../types";
+import {
+  IScaffoldedQuestions,
+  IScaffoldedInstructions,
+  QuestionSchemas,
+  ScaffoldedQuestionsSchema,
+  ScaffoldedInstructionsSchema,
+} from "./question";
 import { setDiscriminator } from "./utils";
 
 interface IPrimmSection {
@@ -13,12 +18,14 @@ interface IPrimmSection {
 }
 
 export interface IPrimmPredict extends IPrimmSection {
-  questionSets: IQuestionSet[];
+  scaffoldedQuestions: IScaffoldedQuestions[];
 }
 
 // export interface IPrimmRun extends IPrimmSection {}
 // export interface IPrimmInvestigate extends IPrimmSection {}
-// export interface IPrimmModify extends IPrimmSection {}
+export interface IPrimmModify extends IPrimmSection {
+  scaffoldedInstructions: IScaffoldedInstructions[];
+}
 // export interface IPrimmMake extends IPrimmSection {}
 
 export interface IPrimmChallenge {
@@ -27,7 +34,7 @@ export interface IPrimmChallenge {
   predict: IPrimmPredict;
   run: IPrimmSection;
   investigate: IPrimmSection;
-  modify: IPrimmSection;
+  modify: IPrimmModify;
   make: IPrimmSection;
 }
 
@@ -38,26 +45,35 @@ const PrimmPredictSchema = new Schema(
     codeWidget: {
       type: EmbeddedIframeSchema,
     },
-    questionSets: {
-      type: [QuestionSetSchema],
+    scaffoldedQuestions: {
+      type: [ScaffoldedQuestionsSchema],
     },
   },
   { _id: false }
 );
 
-setDiscriminator({
-  parentSchema: PrimmPredictSchema,
-  path: "codeWidget",
-  schemasById: EmbeddedSystemSchemas,
-});
-setDiscriminator({
-  parentSchema: QuestionSetSchema,
-  path: "questions",
-  schemasById: QuestionSchemas,
-});
+const PrimmModifySchema = new Schema(
+  {
+    codeWidget: {
+      type: EmbeddedIframeSchema,
+    },
+    scaffoldedInstructions: {
+      type: [ScaffoldedInstructionsSchema],
+    },
+  },
+  { _id: false }
+);
+
+[PrimmPredictSchema, PrimmModifySchema].forEach((parentSchema) =>
+  setDiscriminator({
+    parentSchema,
+    path: "codeWidget",
+    schemasById: EmbeddedSystemSchemas,
+  })
+);
 
 const PrimmRunSchema = new Schema({
-  questionSets: {
+  scaffoldedQuestions: {
     type: String, // SORT LATER
   },
 });
@@ -71,6 +87,9 @@ const PrimmChallengeSchema = new Schema({
   },
   predict: {
     type: PrimmPredictSchema,
+  },
+  modify: {
+    type: PrimmModifySchema,
   },
 });
 
