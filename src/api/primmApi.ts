@@ -2,18 +2,24 @@ import * as logger from "winston";
 import * as _ from "lodash";
 
 import { PrimmChallenge } from "../db/model/primm";
+import { EmbeddedIframe } from "../db/model/embeddedIframe";
 import checkPathId from "../middleware/checkPathId";
 import { RestApi } from "./types";
 
 const RESOURCE_URL = "/primm";
-const RESOURCE_WITH_CHALLENGE_ID = `${RESOURCE_URL}/:id`;
+const RESOURCE_WITH_ID = `${RESOURCE_URL}/:id`;
+const RESOURCE_WITH_ID_PREDICT = `${RESOURCE_URL}/predict/:id`;
+const RESOURCE_WITH_ID_RUN = `${RESOURCE_URL}/run/:id`;
+const RESOURCE_WITH_ID_INVESTIGATE = `${RESOURCE_URL}/investigate/:id`;
+const RESOURCE_WITH_ID_MODIFY = `${RESOURCE_URL}/modify/:id`;
+const RESOURCE_WITH_ID_MAKE = `${RESOURCE_URL}/make/:id`;
 
 const api: RestApi = ({ app }) => {
-  // Get all challenges
+  // Get all challenges, title and description only
   app.get(RESOURCE_URL, async (req, res) => {
     try {
-      const challenges = await PrimmChallenge.find({});
-      res.send(challenges);
+      const found = await PrimmChallenge.find({}, "title description");
+      res.send(found);
     } catch (err) {
       logger.error(err);
       res.status(500);
@@ -22,17 +28,17 @@ const api: RestApi = ({ app }) => {
   });
 
   // Get a specific challenge
-  app.get(RESOURCE_WITH_CHALLENGE_ID, checkPathId, async (req, res) => {
+  app.get(RESOURCE_WITH_ID, checkPathId, async (req, res) => {
     try {
       const _id = req.params.id;
 
-      const task = await PrimmChallenge.findOne({ _id });
+      const found = await PrimmChallenge.findOne({ _id });
 
-      if (!task) {
+      if (!found) {
         return res.sendStatus(404);
       }
 
-      res.send(task);
+      res.send(found);
     } catch (err) {
       logger.error(err);
       res.status(500);
@@ -45,6 +51,39 @@ const api: RestApi = ({ app }) => {
       const challenge = new PrimmChallenge(req.body);
       challenge.save();
       res.send(challenge);
+    } catch (err) {
+      logger.error(err);
+      res.status(500);
+      res.send(err);
+    }
+  });
+
+  app.put(RESOURCE_WITH_ID_PREDICT, async (req, res) => {
+    try {
+      const _id = req.params.id;
+
+      const body = _.pick(req.body, ["codeWidget", "questionSets"]);
+      logger.info(`Updating PRIMM Predict ${_id} with ${JSON.stringify(body)}`);
+
+      const codeWidget = await EmbeddedIframe.create(body.codeWidget);
+
+      const updated = await PrimmChallenge.findOneAndUpdate(
+        { _id },
+        {
+          $set: {
+            predict: {
+              codeWidget,
+            },
+          },
+        },
+        { new: true }
+      );
+
+      if (!updated) {
+        return res.sendStatus(404);
+      }
+
+      return res.send({ updated });
     } catch (err) {
       logger.error(err);
       res.status(500);

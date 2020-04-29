@@ -11,8 +11,8 @@ const RESOURCE_WITH_ID = `${RESOURCE_URL}/:id`;
 const api: RestApi = ({ app }) => {
   app.get(RESOURCE_URL, async (req, res) => {
     try {
-      const courses = await Course.find({});
-      res.send(courses);
+      const found = await Course.find({});
+      res.send(found);
     } catch (err) {
       logger.error(err);
       res.status(500);
@@ -24,13 +24,13 @@ const api: RestApi = ({ app }) => {
     try {
       const _id = req.params.id;
 
-      const course = await Course.findOne({ _id });
+      const found = await Course.findOne({ _id });
 
-      if (!course) {
+      if (!found) {
         return res.sendStatus(404);
       }
 
-      res.send(course);
+      res.send(found);
     } catch (err) {
       logger.error(err);
       res.status(500);
@@ -40,9 +40,9 @@ const api: RestApi = ({ app }) => {
 
   app.post(RESOURCE_URL, async (req, res) => {
     try {
-      const course = new Course(req.body);
-      course.save();
-      res.send(course);
+      const created = new Course(req.body);
+      created.save();
+      res.send(created);
     } catch (err) {
       logger.error(err);
       res.status(500);

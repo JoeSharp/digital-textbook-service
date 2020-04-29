@@ -1,9 +1,11 @@
+import { model, Schema, Types, Document } from "mongoose";
+
 export enum IEmbeddedIframeSystem {
-  Trinket,
-  p5js,
-  codeDotOrg,
-  codePen,
-  gitHubGist,
+  Trinket = "Trinket",
+  p5js = "p5js",
+  codeDotOrg = "codeDotOrg",
+  codePen = "codePen",
+  gitHubGist = "gitHubGist",
 }
 
 export interface IBaseEmbeddedIframe {
@@ -38,7 +40,69 @@ export type IEmbeddedIframe =
   | IEmbeddedP5Sketch
   | IEmbeddedGitHubGist;
 
-export interface YouTubeLinkType {
-  youTubeId: string;
-  startTime?: number;
-}
+export type IEmbeddedIframeDoc = IEmbeddedIframe & Document;
+
+export const EmbeddedIframeSchema: Schema = new Schema(
+  {
+    system: {
+      type: String,
+      enum: Object.keys(IEmbeddedIframeSystem),
+    },
+  },
+  { discriminatorKey: "system" }
+);
+
+export const EmbeddedTrinketSchema = new Schema({
+  trinketId: {
+    type: String,
+  },
+});
+export const EmbeddedCodePenSchema = new Schema({
+  codePenId: {
+    type: String,
+  },
+});
+
+export const EmbeddedCodeDotOrgSchema = new Schema({
+  projectId: {
+    type: String,
+  },
+});
+
+export const EmbeddedP5SketchSchema = new Schema({
+  sketchId: {
+    type: String,
+  },
+});
+
+export const EmbeddedGitHubGistSchema = new Schema({
+  gistId: {
+    type: String,
+  },
+});
+
+export const EmbeddedIframe = model<IEmbeddedIframeDoc>(
+  "embeddedIframe",
+  EmbeddedIframeSchema
+);
+
+export const EmbeddedTrinket = EmbeddedIframe.discriminator(
+  IEmbeddedIframeSystem.Trinket.toString(),
+  EmbeddedTrinketSchema
+);
+export const EmbeddedCodePen = EmbeddedIframe.discriminator(
+  IEmbeddedIframeSystem.codePen.toString(),
+  EmbeddedCodePenSchema
+);
+export const EmbeddedCodeDotOrg = EmbeddedIframe.discriminator(
+  IEmbeddedIframeSystem.codeDotOrg.toString(),
+  EmbeddedCodeDotOrgSchema
+);
+export const EmbeddedP5Sketch = EmbeddedIframe.discriminator(
+  IEmbeddedIframeSystem.p5js.toString(),
+  EmbeddedP5SketchSchema
+);
+export const EmbeddedGitHubGist = EmbeddedIframe.discriminator(
+  IEmbeddedIframeSystem.gitHubGist.toString(),
+  EmbeddedGitHubGistSchema
+);

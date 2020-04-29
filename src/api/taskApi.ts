@@ -15,8 +15,8 @@ const api: RestApi = ({ app }) => {
     try {
       const lessonId = req.params.id;
 
-      const tasks = await Task.find({ lessonId });
-      res.send(tasks);
+      const found = await Task.find({ lessonId });
+      res.send(found);
     } catch (err) {
       logger.error(err);
       res.status(500);
@@ -29,13 +29,13 @@ const api: RestApi = ({ app }) => {
     try {
       const _id = req.params.id;
 
-      const task = await Task.findOne({ _id });
+      const found = await Task.findOne({ _id });
 
-      if (!task) {
+      if (!found) {
         return res.sendStatus(404);
       }
 
-      res.send(task);
+      res.send(found);
     } catch (err) {
       logger.error(err);
       res.status(500);
@@ -62,9 +62,8 @@ const api: RestApi = ({ app }) => {
         )}`
       );
 
-      const task = { lessonId, ...req.body };
-      await Task.create(task);
-      res.send(task);
+      const created = await Task.create({ lessonId, ...req.body });
+      res.send(created);
     } catch (err) {
       logger.error(err);
       res.status(500);

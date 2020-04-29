@@ -1,5 +1,10 @@
 import { model, Schema, Types, Document } from "mongoose";
-import { IEmbeddedIframe } from "./embeddedIframe";
+import {
+  IEmbeddedIframe,
+  EmbeddedIframeSchema,
+  EmbeddedGitHubGistSchema,
+  IEmbeddedIframeSystem,
+} from "./embeddedIframe";
 import { IQuestionSet } from "./question";
 
 interface IPrimmSection {
@@ -27,12 +32,43 @@ export interface IPrimmChallenge {
 
 export type IPrimmChallengeDoc = IPrimmChallenge & Document;
 
+const PrimmSectionSchema = new Schema(
+  {
+    codeWidget: {
+      type: EmbeddedIframeSchema,
+    },
+  },
+  { _id: false }
+);
+
+const PrimmPredictSchema = new Schema();
+PrimmPredictSchema.add(PrimmSectionSchema);
+PrimmPredictSchema.add({
+  questionSets: {
+    type: String, // SORT LATER
+  },
+});
+
+(PrimmPredictSchema.path("codeWidget") as any).discriminator(
+  IEmbeddedIframeSystem.gitHubGist.toString(),
+  EmbeddedGitHubGistSchema
+);
+
+const PrimmRunSchema = new Schema({
+  questionSets: {
+    type: String, // SORT LATER
+  },
+});
+
 const PrimmChallengeSchema = new Schema({
   title: {
     type: String,
   },
   description: {
     type: String,
+  },
+  predict: {
+    type: PrimmPredictSchema,
   },
 });
 

@@ -15,8 +15,8 @@ const api: RestApi = ({ app }) => {
     try {
       const courseId = req.params.id;
 
-      const lessons = await Lesson.find({ courseId });
-      res.send(lessons);
+      const found = await Lesson.find({ courseId });
+      res.send(found);
     } catch (err) {
       logger.error(err);
       res.status(500);
@@ -29,13 +29,13 @@ const api: RestApi = ({ app }) => {
     try {
       const _id = req.params.id;
 
-      const lesson = await Lesson.findOne({ _id });
+      const found = await Lesson.findOne({ _id });
 
-      if (!lesson) {
+      if (!found) {
         return res.sendStatus(404);
       }
 
-      res.send(lesson);
+      res.send(found);
     } catch (err) {
       logger.error(err);
       res.status(500);
@@ -57,9 +57,9 @@ const api: RestApi = ({ app }) => {
         )}`
       );
 
-      const lesson = new Lesson({ courseId, ...req.body });
-      lesson.save();
-      res.send(lesson);
+      const created = new Lesson({ courseId, ...req.body });
+      created.save();
+      res.send(created);
     } catch (err) {
       logger.error(err);
       res.status(500);
