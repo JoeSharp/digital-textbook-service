@@ -1,9 +1,8 @@
-import { model, Schema, Types, Document } from "mongoose";
+import { model, Schema, Document } from "mongoose";
 import {
   IEmbeddedIframe,
   EmbeddedIframeSchema,
-  EmbeddedGitHubGistSchema,
-  IEmbeddedIframeSystem,
+  EmbeddedSystemSchemas,
 } from "./embeddedIframe";
 import { IQuestionSet } from "./question";
 
@@ -32,27 +31,24 @@ export interface IPrimmChallenge {
 
 export type IPrimmChallengeDoc = IPrimmChallenge & Document;
 
-const PrimmSectionSchema = new Schema(
+const PrimmPredictSchema = new Schema(
   {
     codeWidget: {
       type: EmbeddedIframeSchema,
+    },
+    questionSets: {
+      type: String, // SORT LATER
     },
   },
   { _id: false }
 );
 
-const PrimmPredictSchema = new Schema();
-PrimmPredictSchema.add(PrimmSectionSchema);
-PrimmPredictSchema.add({
-  questionSets: {
-    type: String, // SORT LATER
-  },
-});
-
-(PrimmPredictSchema.path("codeWidget") as any).discriminator(
-  IEmbeddedIframeSystem.gitHubGist.toString(),
-  EmbeddedGitHubGistSchema
-);
+// TODO: This seems...sub optimal
+Object.entries(EmbeddedSystemSchemas)
+  .map((k) => ({ system: k[0], schema: k[1] }))
+  .forEach(({ system, schema }) =>
+    (PrimmPredictSchema.path("codeWidget") as any).discriminator(system, schema)
+  );
 
 const PrimmRunSchema = new Schema({
   questionSets: {

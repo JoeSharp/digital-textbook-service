@@ -2,7 +2,6 @@ import * as logger from "winston";
 import * as _ from "lodash";
 
 import { PrimmChallenge } from "../db/model/primm";
-import { EmbeddedIframe } from "../db/model/embeddedIframe";
 import checkPathId from "../middleware/checkPathId";
 import { RestApi } from "./types";
 
@@ -65,15 +64,11 @@ const api: RestApi = ({ app }) => {
       const body = _.pick(req.body, ["codeWidget", "questionSets"]);
       logger.info(`Updating PRIMM Predict ${_id} with ${JSON.stringify(body)}`);
 
-      const codeWidget = await EmbeddedIframe.create(body.codeWidget);
-
       const updated = await PrimmChallenge.findOneAndUpdate(
         { _id },
         {
           $set: {
-            predict: {
-              codeWidget,
-            },
+            predict: body,
           },
         },
         { new: true }
@@ -84,6 +79,24 @@ const api: RestApi = ({ app }) => {
       }
 
       return res.send({ updated });
+    } catch (err) {
+      logger.error(err);
+      res.status(500);
+      res.send(err);
+    }
+  });
+
+  app.delete(RESOURCE_WITH_ID, checkPathId, async (req, res) => {
+    try {
+      const _id = req.params.id;
+
+      const removed = await PrimmChallenge.findOneAndDelete({ _id });
+
+      if (!removed) {
+        return res.sendStatus(404);
+      }
+
+      res.send({ removed });
     } catch (err) {
       logger.error(err);
       res.status(500);
