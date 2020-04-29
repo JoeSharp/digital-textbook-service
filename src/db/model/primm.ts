@@ -4,7 +4,9 @@ import {
   EmbeddedIframeSchema,
   EmbeddedSystemSchemas,
 } from "./embeddedIframe";
-import { IQuestionSet } from "./question";
+import { IQuestionSet, QuestionSchemas, QuestionSetSchema } from "./question";
+import { SchemaById } from "../../types";
+import { setDiscriminator } from "./utils";
 
 interface IPrimmSection {
   codeWidget: IEmbeddedIframe;
@@ -37,18 +39,22 @@ const PrimmPredictSchema = new Schema(
       type: EmbeddedIframeSchema,
     },
     questionSets: {
-      type: String, // SORT LATER
+      type: [QuestionSetSchema],
     },
   },
   { _id: false }
 );
 
-// TODO: This seems...sub optimal
-Object.entries(EmbeddedSystemSchemas)
-  .map((k) => ({ system: k[0], schema: k[1] }))
-  .forEach(({ system, schema }) =>
-    (PrimmPredictSchema.path("codeWidget") as any).discriminator(system, schema)
-  );
+setDiscriminator({
+  parentSchema: PrimmPredictSchema,
+  path: "codeWidget",
+  schemasById: EmbeddedSystemSchemas,
+});
+setDiscriminator({
+  parentSchema: QuestionSetSchema,
+  path: "questions",
+  schemasById: QuestionSchemas,
+});
 
 const PrimmRunSchema = new Schema({
   questionSets: {
