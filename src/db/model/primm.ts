@@ -44,7 +44,7 @@ export interface IPrimmChallenge {
 
 export type IPrimmChallengeDoc = IPrimmChallenge & Document;
 
-const PrimmPredictSchema = new Schema(
+const PrimmCodeQuestionSchema = new Schema(
   {
     codeWidget: {
       type: EmbeddedIframeSchema,
@@ -56,7 +56,16 @@ const PrimmPredictSchema = new Schema(
   { _id: false }
 );
 
-const PrimmModifySchema = new Schema(
+const PrimmRunSchema = new Schema(
+  {
+    codeWidget: {
+      type: EmbeddedIframeSchema,
+    },
+  },
+  { _id: false }
+);
+
+const PrimmCodeRemixSchema = new Schema(
   {
     codeWidget: {
       type: EmbeddedIframeSchema,
@@ -68,19 +77,14 @@ const PrimmModifySchema = new Schema(
   { _id: false }
 );
 
-[PrimmPredictSchema, PrimmModifySchema].forEach((parentSchema) =>
-  setDiscriminator({
-    parentSchema,
-    path: "codeWidget",
-    schemasById: EmbeddedSystemSchemas,
-  })
+[PrimmCodeQuestionSchema, PrimmRunSchema, PrimmCodeRemixSchema].forEach(
+  (parentSchema) =>
+    setDiscriminator({
+      parentSchema,
+      path: "codeWidget",
+      schemasById: EmbeddedSystemSchemas,
+    })
 );
-
-const PrimmRunSchema = new Schema({
-  scaffoldedQuestions: {
-    type: String, // SORT LATER
-  },
-});
 
 const PrimmChallengeSchema = new Schema({
   title: {
@@ -90,10 +94,19 @@ const PrimmChallengeSchema = new Schema({
     type: String,
   },
   predict: {
-    type: PrimmPredictSchema,
+    type: PrimmCodeQuestionSchema,
+  },
+  run: {
+    type: PrimmRunSchema,
+  },
+  investigate: {
+    type: PrimmCodeQuestionSchema,
   },
   modify: {
-    type: PrimmModifySchema,
+    type: PrimmCodeRemixSchema,
+  },
+  make: {
+    type: PrimmCodeRemixSchema,
   },
 });
 
