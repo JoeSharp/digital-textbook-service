@@ -12,6 +12,7 @@ export enum IQuestionType {
 interface IBaseQuestion {
   type: IQuestionType;
   question: string;
+  id: string;
 }
 
 export interface IMultipleChoiceQuestion extends IBaseQuestion {
@@ -41,6 +42,9 @@ export interface IScaffoldedQuestions {
 
 export const QuestionSchema = new Schema(
   {
+    id: {
+      type: String,
+    },
     type: {
       type: String,
       enum: Object.keys(IQuestionType),

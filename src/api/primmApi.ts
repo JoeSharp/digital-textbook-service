@@ -60,7 +60,7 @@ const api: RestApi = ({ app }) => {
       try {
         const _id = req.params.id;
 
-        const body = _.pick(req.body, fields);
+        const body = _.pick(req.body, ["codeWidget", ...fields]);
         logger.debug(
           `Updating PRIMM ${section} ${_id} with ${JSON.stringify(body)}`
         );
@@ -88,8 +88,11 @@ const api: RestApi = ({ app }) => {
     });
   };
 
-  createUpdatePart("predict", ["codeWidget", "scaffoldedQuestions"]);
-  createUpdatePart("modify", ["codeWidget", "scaffoldedInstructions"]);
+  createUpdatePart("predict", ["scaffoldedQuestions"]);
+  createUpdatePart("run", []);
+  createUpdatePart("investigate", ["scaffoldedQuestions"]);
+  createUpdatePart("modify", ["scaffoldedInstructions"]);
+  createUpdatePart("make", ["instructions"]);
 
   app.delete(RESOURCE_WITH_ID, checkPathId, async (req, res) => {
     try {

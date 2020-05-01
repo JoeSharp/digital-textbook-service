@@ -22,11 +22,15 @@ export interface IPrimmPredict extends IPrimmSection {
 }
 
 // export interface IPrimmRun extends IPrimmSection {}
-// export interface IPrimmInvestigate extends IPrimmSection {}
+export interface IPrimmInvestigate extends IPrimmSection {
+  scaffoldedQuestions: IScaffoldedQuestions[];
+}
 export interface IPrimmModify extends IPrimmSection {
   scaffoldedInstructions: IScaffoldedInstructions[];
 }
-// export interface IPrimmMake extends IPrimmSection {}
+export interface IPrimmMake extends IPrimmSection {
+  instructions: string;
+}
 
 export interface IPrimmChallenge {
   title: string;
@@ -35,7 +39,7 @@ export interface IPrimmChallenge {
   run: IPrimmSection;
   investigate: IPrimmSection;
   modify: IPrimmModify;
-  make: IPrimmSection;
+  make: IPrimmMake;
 }
 
 export type IPrimmChallengeDoc = IPrimmChallenge & Document;
