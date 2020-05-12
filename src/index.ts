@@ -7,7 +7,6 @@ import apis from "./api";
 
 import { connectDb } from "./db/mongoose";
 import uiCors from "./middleware/cors_ui";
-import authenticate from "./middleware/authenticate";
 
 logger.configure({
   level: "debug",
@@ -19,7 +18,6 @@ connectDb();
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(authenticate);
 app.use(uiCors);
 
 const PORT = process.env.PORT || 8080;

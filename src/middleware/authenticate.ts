@@ -1,22 +1,28 @@
 import { RequestHandler } from "express";
+import * as logger from "winston";
 
-import oauth2Factory, { ModuleOptions } from "simple-oauth2";
+import { OAuth2Client } from "google-auth-library";
 
-const credentials: ModuleOptions = {
-  client: {
-    id: process.env.GOOGLE_CLIENT_ID,
-    secret: process.env.GOOGLE_CLIENT_SECRET,
-  },
-  auth: {
-    tokenHost: "https://www.googleapis.com/auth/drive.appdata",
-  },
-};
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
-const oauth2 = oauth2Factory.create(credentials);
+const authenticate: RequestHandler = async (req, res, next) => {
+  const idToken = req.header("Authorization").replace("Bearer ", "");
 
-const authenticate: RequestHandler = (req, res, next) => {
-  next();
-  // var token = req.header('x-auth');
+  logger.info(`Request made with token: ${idToken}`);
+  try {
+    const ticket = await client.verifyIdToken({
+      idToken,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+    const payload = ticket.getPayload();
+    const userId = payload.sub;
+    logger.info("Verified Google User ID: " + userId);
+    next();
+  } catch (err) {
+    logger.warn("User idToken could not be validated");
+    // next();
+    res.sendStatus(401);
+  }
 
   // User.findByToken(token)
   //   .then((user) => {
