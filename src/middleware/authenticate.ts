@@ -16,6 +16,7 @@ const authenticate: RequestHandler = async (req, res, next) => {
     });
     const payload = ticket.getPayload();
     const userId = payload.sub;
+    req.googleTicket = ticket;
     logger.info("Verified Google User ID: " + userId);
     next();
   } catch (err) {
