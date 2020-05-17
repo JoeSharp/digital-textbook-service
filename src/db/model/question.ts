@@ -40,6 +40,10 @@ export interface IScaffoldedQuestions {
   questions: IQuestion[];
 }
 
+export interface IQuestionResponses {
+  [questionId: string]: string | undefined;
+}
+
 export const QuestionSchema = new Schema(
   {
     id: {

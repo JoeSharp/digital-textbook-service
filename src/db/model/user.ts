@@ -7,6 +7,7 @@ export enum IUserProfile {
 }
 
 export enum IApplicationRoles {
+  viewContent = "VIEW_CONTENT",
   study = "STUDY",
   editResources = "EDIT_COURSES",
   editUsers = "EDIT_USERS",

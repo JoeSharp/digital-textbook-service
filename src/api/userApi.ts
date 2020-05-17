@@ -25,6 +25,7 @@ const api: RestApi = ({ app }) => {
         profile: IUserProfile.administrator,
         emailAddress: googleTicket.getPayload().email,
         authorisations: [
+          IApplicationRoles.viewContent,
           IApplicationRoles.editResources,
           IApplicationRoles.editUsers,
           IApplicationRoles.study,

@@ -1,10 +1,8 @@
 import * as logger from "winston";
 import * as _ from "lodash";
 
-import { PrimmChallenge, IPrimmChallenge } from "../db/model/primm";
-import checkPathId from "../middleware/checkPathId";
 import { RestApi } from "./types";
-import { IWorkType, Work } from "../db/model/myWork";
+import { IWorkType, Work, getBlankWorkContent } from "../db/model/myWork";
 
 const RESOURCE_URL = "/myWork";
 const RESOURCE_WITH_WORK_TYPE_AND_ID = `${RESOURCE_URL}/:workType/:workId`;
@@ -20,7 +18,11 @@ const api: RestApi = ({ app }) => {
       const found = await Work.findOne({ workType, workId });
 
       if (!found) {
-        const created = await Work.create({ workType, workId });
+        const created = await Work.create({
+          workType,
+          workId,
+          workContent: getBlankWorkContent(workType),
+        });
         return res.send(created.workContent);
       }
 

@@ -8,7 +8,7 @@ const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 const authenticate: RequestHandler = async (req, res, next) => {
   const idToken = req.header("Authorization").replace("Bearer ", "");
 
-  logger.info(`Request made with token: ${idToken}`);
+  logger.debug(`Request made with token: ${idToken}`);
   try {
     const ticket = await client.verifyIdToken({
       idToken,
@@ -17,7 +17,7 @@ const authenticate: RequestHandler = async (req, res, next) => {
     const payload = ticket.getPayload();
     const userId = payload.sub;
     req.googleTicket = ticket;
-    logger.info("Verified Google User ID: " + userId);
+    logger.debug("Verified Google User ID: " + userId);
     next();
   } catch (err) {
     logger.warn("User idToken could not be validated");

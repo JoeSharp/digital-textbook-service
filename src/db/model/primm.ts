@@ -7,9 +7,9 @@ import {
 import {
   IScaffoldedQuestions,
   IScaffoldedInstructions,
-  QuestionSchemas,
   ScaffoldedQuestionsSchema,
   ScaffoldedInstructionsSchema,
+  IQuestionResponses,
 } from "./question";
 import { setDiscriminator } from "./utils";
 
@@ -43,6 +43,31 @@ export interface IPrimmChallenge {
 }
 
 export type IPrimmChallengeDoc = IPrimmChallenge & Document;
+
+export interface IPrimmRunResponse {
+  predictionComparison: string;
+}
+export interface IPrimmRemixResponse {
+  urlOfRemix: string;
+}
+
+export interface IPrimmWork {
+  predict: IQuestionResponses;
+  run: IPrimmRunResponse;
+  investigate: IQuestionResponses;
+  modify: IPrimmRemixResponse;
+  make: IPrimmRemixResponse;
+}
+
+export const BLANK_PRIMM_WORK: IPrimmWork = {
+  predict: {},
+  run: {
+    predictionComparison: "",
+  },
+  investigate: {},
+  modify: { urlOfRemix: "" },
+  make: { urlOfRemix: "" },
+};
 
 const PrimmCodeQuestionSchema = new Schema(
   {
