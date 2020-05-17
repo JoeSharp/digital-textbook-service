@@ -10,6 +10,7 @@ import {
   ScaffoldedQuestionsSchema,
   ScaffoldedInstructionsSchema,
   IQuestionResponses,
+  EMPTY_SCAFFOLDED_QUESTION_RESPONSES,
 } from "./question";
 import { setDiscriminator } from "./utils";
 
@@ -59,14 +60,17 @@ export interface IPrimmWork {
   make: IPrimmRemixResponse;
 }
 
-export const BLANK_PRIMM_WORK: IPrimmWork = {
-  predict: {},
-  run: {
-    predictionComparison: "",
-  },
-  investigate: {},
-  modify: { urlOfRemix: "" },
-  make: { urlOfRemix: "" },
+export const EMPTY_RUN_RESPONSE: IPrimmRunResponse = {
+  predictionComparison: "",
+};
+export const EMPTY_URL_REMIX: IPrimmRemixResponse = { urlOfRemix: "" };
+
+export const EMPTY_PRIMM_WORK: IPrimmWork = {
+  predict: EMPTY_SCAFFOLDED_QUESTION_RESPONSES,
+  run: EMPTY_RUN_RESPONSE,
+  investigate: EMPTY_SCAFFOLDED_QUESTION_RESPONSES,
+  modify: EMPTY_URL_REMIX,
+  make: EMPTY_URL_REMIX,
 };
 
 const PrimmCodeQuestionSchema = new Schema(

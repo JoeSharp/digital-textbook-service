@@ -1,5 +1,5 @@
 import { model, Document, Schema } from "mongoose";
-import { IPrimmWork, BLANK_PRIMM_WORK } from "./primm";
+import { EMPTY_PRIMM_WORK } from "./primm";
 
 export enum IWorkType {
   primmChallenge = "primmChallenge",
@@ -35,7 +35,7 @@ export const getBlankWorkContent = (workType: IWorkType) => {
     case IWorkType.courseTask:
       return {};
     case IWorkType.primmChallenge:
-      return BLANK_PRIMM_WORK;
+      return EMPTY_PRIMM_WORK;
   }
 };
 

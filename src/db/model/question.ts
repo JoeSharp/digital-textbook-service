@@ -44,6 +44,8 @@ export interface IQuestionResponses {
   [questionId: string]: string | undefined;
 }
 
+export const EMPTY_SCAFFOLDED_QUESTION_RESPONSES: IQuestionResponses = {};
+
 export const QuestionSchema = new Schema(
   {
     id: {
